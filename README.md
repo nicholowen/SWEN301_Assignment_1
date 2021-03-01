@@ -1,3 +1,4 @@
-# swen301-2021-assignment1-template
+## SWEN301 Assignment 1 Template
 
-project template for SWEN301 assignment 1
+Please refer to the assignment brief for details. 
+
