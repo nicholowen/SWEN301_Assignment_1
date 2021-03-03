@@ -20,7 +20,6 @@ public class TestStudentManager {
 
     @Test
     public void dummyTest() throws Exception {
-        StudentDB.init();
         Student student = new StudentManager().readStudent("id42");
         // THIS WILL INITIALLY FAIL !!
         assertNotNull(student);
