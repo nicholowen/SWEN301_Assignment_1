@@ -5,6 +5,8 @@ import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -23,5 +25,23 @@ public class TestStudentManager {
         Student student = new StudentManager().readStudent("id42");
         // THIS WILL INITIALLY FAIL !!
         assertNotNull(student);
+    }
+
+    @Test
+    public void readStudentTest_1() throws Exception {
+        Student student = new StudentManager().readStudent("id42");
+        assertEquals("Sue", student.getFirstName());
+    }
+
+    @Test
+    public void readStudentTest_2() throws Exception {
+        Student student = new StudentManager().readStudent("id6");
+        assertEquals("Tom", student.getFirstName());
+    }
+
+    @Test
+    public void readStudentTest_3() throws Exception {
+        Student student = new StudentManager().readStudent("id7");
+        assertEquals("Ramirez", student.getName());
     }
 }

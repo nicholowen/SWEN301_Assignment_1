@@ -1,16 +1,33 @@
 package nz.ac.wgtn.swen301.assignment1;
 
+import nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails;
 import nz.ac.wgtn.swen301.studentdb.*;
 import java.sql.*;
 import java.util.Collection;
 
-// this is a test.
+
 
 /**
  * A student managers providing basic CRUD operations for instances of Student, and a read operation for instances of Degree.
  * @author jens dietrich
  */
 public class StudentManager {
+
+    public static Statement stmt;
+
+    public StudentManager(){
+        try{
+
+            String url = "jdbc:derby:memory:studentdb;create=true";
+            Connection conn = DriverManager.getConnection(url);
+            System.out.println("got it");
+            stmt = conn.createStatement();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // DO NOT REMOVE THE FOLLOWING -- THIS WILL ENSURE THAT THE DATABASE IS AVAILABLE
     // AND THE APPLICATION CAN CONNECT TO IT WITH JDBC
@@ -29,8 +46,26 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student readStudent(String id) throws NoSuchRecordException {
-        return null;
+    public static Student readStudent(String id) throws NoSuchRecordException, SQLException {
+
+        System.out.println(stmt.getConnection());
+        ResultSet results = stmt.executeQuery(
+              "SELECT * FROM students " +
+                    "WHERE id = '" + id + "'");
+
+        String f_name = null;
+        String s_name = null;
+
+        while(results.next()) {
+            f_name = results.getString(2);
+            s_name = results.getString(3);
+        }
+
+        Student student = new Student();
+        student.setFirstName(f_name);
+        student.setName(s_name);
+
+        return student;
     }
 
     /**

@@ -1,5 +1,8 @@
 package nz.ac.wgtn.swen301.assignment1.cli;
 
+import nz.ac.wgtn.swen301.assignment1.StudentManager;
+import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,22 +20,20 @@ public class FindStudentDetails {
 
     public static Statement stmt = null;
 
-    public static void main (String[] arg){
+    public static void main (String[] arg) throws SQLException, NoSuchRecordException {
 
-        try{
+//        try{
+//
+//            String url = "jdbc:derby:memory:studentdb;create=true";
+//            Connection conn = DriverManager.getConnection(url);
+//            System.out.println("got it");
+//            stmt = conn.createStatement();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
-            String url = "jdbc:derby:memory:studentdb;create=true";
-            Connection conn = DriverManager.getConnection(url);
-
-
-            stmt = conn.createStatement();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-
+        StudentManager.readStudent("id42");
 
     }
 }
