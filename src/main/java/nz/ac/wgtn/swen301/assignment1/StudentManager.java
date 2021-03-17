@@ -4,6 +4,8 @@ import nz.ac.wgtn.swen301.studentdb.*;
 import java.sql.*;
 import java.util.Collection;
 
+// this is a test.
+
 /**
  * A student managers providing basic CRUD operations for instances of Student, and a read operation for instances of Degree.
  * @author jens dietrich
