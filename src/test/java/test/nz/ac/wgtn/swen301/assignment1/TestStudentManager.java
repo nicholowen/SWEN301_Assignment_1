@@ -1,6 +1,7 @@
 package test.nz.ac.wgtn.swen301.assignment1;
 
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
+import nz.ac.wgtn.swen301.studentdb.Degree;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
@@ -44,4 +45,19 @@ public class TestStudentManager {
         Student student = new StudentManager().readStudent("id7");
         assertEquals("Ramirez", student.getName());
     }
+
+    // READ DEGREE
+
+    @Test
+    public void readDegreeTest_1() throws Exception {
+        Degree degree = new StudentManager().readDegree("deg4");
+        assertEquals("BSc Mathematics", degree.getName());
+    }
+
+    @Test
+    public void readDegreeTest_2() throws Exception {
+        Degree degree = new StudentManager().readDegree("deg9");
+        assertEquals("BCom Marketing", degree.getName());
+    }
+
 }

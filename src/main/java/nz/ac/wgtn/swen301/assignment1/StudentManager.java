@@ -53,15 +53,18 @@ public class StudentManager {
 
         String f_name = null;
         String s_name = null;
+        String degree = null;
 
         while(results.next()) {
             f_name = results.getString(2);
             s_name = results.getString(3);
+            degree = results.getString(4);
         }
 
         Student student = new Student();
         student.setFirstName(f_name);
         student.setName(s_name);
+        student.setDegree(readDegree(degree));
 
         return student;
     }
@@ -77,20 +80,14 @@ public class StudentManager {
     public static Degree readDegree(String id) throws NoSuchRecordException, SQLException {
 
         Degree degree = new Degree();
-        String deg = null;
         String name = null;
 
-        ResultSet studentResults = stmt.executeQuery("SELECT * FROM students " + "WHERE id = '" + id + "'");
-        while(studentResults.next()) {
-            deg = studentResults.getString(4);
-        }
-        ResultSet degreeResults = stmt.executeQuery("SELECT * FROM degrees " + "WHERE id = '" + deg + "'");
+        ResultSet degreeResults = stmt.executeQuery("SELECT * FROM degrees " + "WHERE id = '" + id + "'");
         while(degreeResults.next()) {
             name = degreeResults.getString(2);
         }
 
         degree.setName(name);
-        System.out.println(name);
 
         return degree;
     }
