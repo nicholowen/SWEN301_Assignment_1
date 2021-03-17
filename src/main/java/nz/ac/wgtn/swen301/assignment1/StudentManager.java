@@ -49,9 +49,7 @@ public class StudentManager {
     public static Student readStudent(String id) throws NoSuchRecordException, SQLException {
 
         System.out.println(stmt.getConnection());
-        ResultSet results = stmt.executeQuery(
-              "SELECT * FROM students " +
-                    "WHERE id = '" + id + "'");
+        ResultSet results = stmt.executeQuery("SELECT * FROM students " + "WHERE id = '" + id + "'");
 
         String f_name = null;
         String s_name = null;
@@ -76,8 +74,25 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
-    public static Degree readDegree(String id) throws NoSuchRecordException {
-        return null;
+    public static Degree readDegree(String id) throws NoSuchRecordException, SQLException {
+
+        Degree degree = new Degree();
+        String deg = null;
+        String name = null;
+
+        ResultSet studentResults = stmt.executeQuery("SELECT * FROM students " + "WHERE id = '" + id + "'");
+        while(studentResults.next()) {
+            deg = studentResults.getString(4);
+        }
+        ResultSet degreeResults = stmt.executeQuery("SELECT * FROM degrees " + "WHERE id = '" + deg + "'");
+        while(degreeResults.next()) {
+            name = degreeResults.getString(2);
+        }
+
+        degree.setName(name);
+        System.out.println(name);
+
+        return degree;
     }
 
     /**
