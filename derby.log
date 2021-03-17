@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Thu Mar 18 05:37:10 NZDT 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-410c-5353-000007308478 
+Thu Mar 18 05:41:22 NZDT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-4110-2e78-000007306ab8 
 on database directory memory:D:\Intellij\SWEN301_Assignment_1\Assignment1\studentdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@77556fd 
 Loaded from file:/C:/Users/Owen%20N/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
 java.vendor=JetBrains s.r.o

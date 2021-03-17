@@ -60,4 +60,17 @@ public class TestStudentManager {
         assertEquals("BCom Marketing", degree.getName());
     }
 
+    @Test
+    public void readDegreeTest_3() throws Exception {
+        Student student = new StudentManager().readStudent("id9");
+        Degree degree = student.getDegree();
+        assertEquals("BCom Marketing", degree.getName());
+    }
+
+    //DELETE
+    @Test
+    public void deleteTest_1() throws Exception {
+
+    }
+
 }
