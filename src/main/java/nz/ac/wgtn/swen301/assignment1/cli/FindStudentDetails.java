@@ -32,8 +32,9 @@ public class FindStudentDetails {
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
-
-        StudentManager.readStudent("id42");
+        StudentManager sm = new StudentManager();
+        sm.readStudent("id42");
+        sm.readDegree("id42");
 
     }
 }
