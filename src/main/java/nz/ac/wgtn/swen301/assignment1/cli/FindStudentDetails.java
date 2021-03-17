@@ -9,5 +9,10 @@ public class FindStudentDetails {
      * E.g. a user could invoke this by running "java -cp <someclasspath> nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails id42"
      * @param arg
      */
-    public static void main (String[] arg) {}
+
+    public static void main (String[] arg) {
+
+
+
+    }
 }
