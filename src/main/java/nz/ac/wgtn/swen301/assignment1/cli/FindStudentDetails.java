@@ -1,5 +1,10 @@
 package nz.ac.wgtn.swen301.assignment1.cli;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class FindStudentDetails {
 
     // THE FOLLOWING METHOD MUST IMPLEMENTED
@@ -9,5 +14,25 @@ public class FindStudentDetails {
      * E.g. a user could invoke this by running "java -cp <someclasspath> nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails id42"
      * @param arg
      */
-    public static void main (String[] arg) {}
+
+    public static Statement stmt = null;
+
+    public static void main (String[] arg){
+
+        try{
+
+            String url = "jdbc:derby:memory:studentdb;create=true";
+            Connection conn = DriverManager.getConnection(url);
+
+
+            stmt = conn.createStatement();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
 }
