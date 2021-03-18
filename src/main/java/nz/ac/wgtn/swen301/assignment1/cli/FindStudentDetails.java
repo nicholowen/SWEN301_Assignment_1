@@ -22,16 +22,6 @@ public class FindStudentDetails {
 
     public static void main (String[] arg) throws SQLException, NoSuchRecordException {
 
-//        try{
-//
-//            String url = "jdbc:derby:memory:studentdb;create=true";
-//            Connection conn = DriverManager.getConnection(url);
-//            System.out.println("got it");
-//            stmt = conn.createStatement();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
         StudentManager sm = new StudentManager();
         sm.readStudent("id42");
         sm.readDegree("id42");
