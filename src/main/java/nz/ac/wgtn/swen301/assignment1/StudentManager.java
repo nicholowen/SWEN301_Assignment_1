@@ -80,6 +80,7 @@ public class StudentManager {
                 s_name = results.getString(3);
                 degree = results.getString(4);
             }
+            results.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -119,6 +120,7 @@ public class StudentManager {
             if (degreeResults.next()) {
                 name = degreeResults.getString(2);
             }
+            degreeResults.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -182,15 +184,6 @@ public class StudentManager {
      */
     public static Iterable<String> getAllDegreeIds() {
         return null;
-    }
-
-    /**
-     * Closes statements to release the lock on the table.
-     * @throws SQLException
-     */
-    public static void close() throws SQLException {
-        studentStmt.close();
-        degreeStmt.close();
     }
 
 
