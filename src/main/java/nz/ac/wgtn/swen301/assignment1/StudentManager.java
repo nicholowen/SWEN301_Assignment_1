@@ -14,7 +14,8 @@ import java.util.Map;
  */
 public class StudentManager {
 
-    public static Statement stmt;
+    public static PreparedStatement studentStmt;
+    public static PreparedStatement degreeStmt;
     public static HashMap<String, Student> studentMap;
     public static HashMap<String, Degree> degreeMap;
 
@@ -25,11 +26,17 @@ public class StudentManager {
 
             String url = "jdbc:derby:memory:studentdb;create=true";
             Connection conn = DriverManager.getConnection(url);
-            stmt = conn.createStatement();
+            String readStudents = "select * from students where id = ?";
+            String readDegree = "select * from degrees where id = ?";
+            studentStmt = conn.prepareStatement(readStudents);
+            degreeStmt = conn.prepareStatement(readDegree);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
     }
 
 
@@ -50,7 +57,7 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student readStudent(String id) throws NoSuchRecordException, SQLException {
+    public static Student readStudent(String id) throws NoSuchRecordException {
 
         if(!studentMap.isEmpty()){
             if(studentMap.get(id) != null){
@@ -58,25 +65,26 @@ public class StudentManager {
             }
         }
 
-        StringBuilder command = new StringBuilder("SELECT * FROM students WHERE id = '");
-        command.append(id);
-        command.append("'");
-        ResultSet results = stmt.executeQuery(command.toString());
-
         String f_name = null;
         String s_name = null;
         String degree = null;
 
-        if(results.next()) {
-            f_name = results.getString(2);
-            s_name = results.getString(3);
-            degree = results.getString(4);
+        try {
+            studentStmt.setString(1, id);
+
+            studentStmt.executeQuery();
+            ResultSet results = studentStmt.getResultSet();
+
+            if (results.next()) {
+                f_name = results.getString(2);
+                s_name = results.getString(3);
+                degree = results.getString(4);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        Student student = new Student();
-        student.setFirstName(f_name);
-        student.setName(s_name);
-        student.setDegree(readDegree(degree));
+        Student student = new Student(id, s_name, f_name, readDegree(degree));
         studentMap.put(id, student);
 
         return student;
@@ -90,7 +98,7 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
-    public static Degree readDegree(String id) throws NoSuchRecordException, SQLException {
+    public static Degree readDegree(String id) throws NoSuchRecordException {
 
         if(!degreeMap.isEmpty()){
             if(degreeMap.get(id) != null){
@@ -98,22 +106,26 @@ public class StudentManager {
             }
         }
 
-        StringBuilder command = new StringBuilder("SELECT * FROM degrees WHERE id = '");
-        command.append(id);
-        command.append("'");
-
-        ResultSet degreeResults = stmt.executeQuery(command.toString());
-
         String name = null;
 
-        if(degreeResults.next()) {
-            name = degreeResults.getString(2);
+        try {
+
+            degreeStmt.setString(1, id);
+
+            degreeStmt.executeQuery();
+            ResultSet degreeResults = degreeStmt.getResultSet();
+
+
+            if (degreeResults.next()) {
+                name = degreeResults.getString(2);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        Degree degree = new Degree();
-        degree.setName(name);
+        Degree degree = new Degree(id, name);
+//        degree.setName(name);
         degreeMap.put(id, degree);
-
         return degree;
     }
 
@@ -170,6 +182,15 @@ public class StudentManager {
      */
     public static Iterable<String> getAllDegreeIds() {
         return null;
+    }
+
+    /**
+     * Closes statements to release the lock on the table.
+     * @throws SQLException
+     */
+    public static void close() throws SQLException {
+        studentStmt.close();
+        degreeStmt.close();
     }
 
 

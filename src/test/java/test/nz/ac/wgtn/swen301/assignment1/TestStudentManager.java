@@ -9,8 +9,7 @@ import org.junit.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 
 public class TestStudentManager {
@@ -25,26 +24,34 @@ public class TestStudentManager {
 
     @Test
     public void dummyTest() throws Exception {
-        Student student = new StudentManager().readStudent("id42");
+        new StudentManager();
+        Student student = StudentManager.readStudent("id42");
+        StudentManager.close();
         // THIS WILL INITIALLY FAIL !!
         assertNotNull(student);
     }
 
     @Test
     public void test_readStudent1() throws Exception {
-        Student student = new StudentManager().readStudent("id42");
+        new StudentManager();
+        Student student = StudentManager.readStudent("id42");
+        StudentManager.close();
         assertEquals("Sue", student.getFirstName());
     }
 
     @Test
     public void test_readStudent2() throws Exception {
-        Student student = new StudentManager().readStudent("id6");
+        new StudentManager();
+        Student student = StudentManager.readStudent("id6");
+        StudentManager.close();
         assertEquals("Tom", student.getFirstName());
     }
 
     @Test
     public void test_readStudent3() throws Exception {
+        new StudentManager();
         Student student = StudentManager.readStudent("id7");
+        StudentManager.close();
         assertEquals("Ramirez", student.getName());
     }
 
@@ -52,13 +59,17 @@ public class TestStudentManager {
 
     @Test
     public void test_readDegree1() throws Exception {
+        new StudentManager();
         Degree degree = StudentManager.readDegree("deg4");
+        StudentManager.close();
         assertEquals("BSc Mathematics", degree.getName());
     }
 
     @Test
     public void test_readDegree2() throws Exception {
+        new StudentManager();
         Degree degree = StudentManager.readDegree("deg9");
+        StudentManager.close();
         assertEquals("BCom Marketing", degree.getName());
     }
 
@@ -67,6 +78,7 @@ public class TestStudentManager {
         new StudentManager();
         Student student = StudentManager.readStudent("id9");
         Degree degree = student.getDegree();
+        StudentManager.close();
         assertEquals("BCom Marketing", degree.getName());
     }
 
@@ -85,14 +97,19 @@ public class TestStudentManager {
         }
 
         double elapsed = ((double)System.nanoTime() - (double)startTime)/1000000000;
-        System.out.println(elapsed);
+        System.out.println("Time elapsed = " + elapsed + " seconds");
+        StudentManager.close();
+        assertTrue(elapsed <= 1.00);
+
 
     }
 
     //DELETE
-    @Test
-    public void deleteTest_1() throws Exception {
+//    @Test
+//    public void deleteTest_1() throws Exception {
+//
+//    }
 
-    }
+
 
 }
