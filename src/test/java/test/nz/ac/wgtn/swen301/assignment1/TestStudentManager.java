@@ -7,6 +7,8 @@ import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -95,10 +97,35 @@ public class TestStudentManager {
     }
 
     //DELETE
-//    @Test
-//    public void deleteTest_1() throws Exception {
-//
-//    }
+    @Test
+    public void deleteTest_1() throws Exception {
+        StudentManager sm = new StudentManager();
+        Student student1 = sm.readStudent("id3");
+
+        sm.delete(student1);
+
+        Student student2 = sm.readStudent("id3");
+        assertEquals("Max", student2.getFirstName());
+
+    }
+
+    @Test
+    public void test_getAllStudentIds() throws Exception {
+        new StudentManager();
+        Collection<String> ids = StudentManager.getAllStudentIds();
+        assertTrue(ids.size() == 10000);
+    }
+
+    @Test
+    public void test_getAllDegreeIds() throws Exception {
+        new StudentManager();
+        Iterable<String> ids = StudentManager.getAllDegreeIds();
+        int counter = 0;
+        for(String i : ids){
+            counter++;
+        }
+        assertTrue(counter == 10);
+    }
 
 
 

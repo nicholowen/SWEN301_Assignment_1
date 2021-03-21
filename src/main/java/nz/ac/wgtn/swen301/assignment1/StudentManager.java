@@ -3,6 +3,7 @@ package nz.ac.wgtn.swen301.assignment1;
 import nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails;
 import nz.ac.wgtn.swen301.studentdb.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,9 @@ public class StudentManager {
 
     public static PreparedStatement studentStmt;
     public static PreparedStatement degreeStmt;
+    public static PreparedStatement deleteStmt;
+    public static PreparedStatement selectStudentIdsStmt;
+    public static PreparedStatement selectDegreeIdsStmt;
     public static HashMap<String, Student> studentMap;
     public static HashMap<String, Degree> degreeMap;
 
@@ -28,8 +32,14 @@ public class StudentManager {
             Connection conn = DriverManager.getConnection(url);
             String readStudents = "select * from students where id = ?";
             String readDegree = "select * from degrees where id = ?";
+            String deleteStudent = "delete from students where id = ?";
+            String selectStudent = "select id from students";
+            String selectDegrees = "select id from degrees";
             studentStmt = conn.prepareStatement(readStudents);
             degreeStmt = conn.prepareStatement(readDegree);
+            deleteStmt = conn.prepareStatement(deleteStudent);
+            selectStudentIdsStmt = conn.prepareStatement(selectStudent);
+            selectDegreeIdsStmt = conn.prepareStatement(selectDegrees);
 
 
         } catch (SQLException e) {
@@ -120,13 +130,14 @@ public class StudentManager {
             if (degreeResults.next()) {
                 name = degreeResults.getString(2);
             }
+
             degreeResults.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         Degree degree = new Degree(id, name);
-//        degree.setName(name);
         degreeMap.put(id, degree);
         return degree;
     }
@@ -138,7 +149,15 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_delete
      */
-    public static void delete(Student student) throws NoSuchRecordException {}
+    public static void delete(Student student) throws NoSuchRecordException {
+        try {
+            deleteStmt.setString(1, student.getId());
+            int rowCount = deleteStmt.executeUpdate();
+            System.out.println("deleted row: " + rowCount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Update (synchronize) a student instance with the database.
@@ -150,7 +169,17 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_update (followed by optional numbers if multiple tests are used)
      */
-    public static void update(Student student) throws NoSuchRecordException {}
+    public static void update(Student student) throws NoSuchRecordException {
+
+        try{
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
     /**
@@ -165,6 +194,10 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_createStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student createStudent(String name,String firstName,Degree degree) {
+
+       //get last row, add 1 to degree number
+        //create new student, then add to db
+
         return null;
     }
 
@@ -174,7 +207,25 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllStudentIds (followed by optional numbers if multiple tests are used)
      */
     public static Collection<String> getAllStudentIds() {
-        return null;
+        //to test, put them all in a hashset, then get the number of students current students and check vs set
+        ArrayList<String> ids = new ArrayList<>();
+
+        try{
+            selectStudentIdsStmt.executeQuery();
+            ResultSet s = selectStudentIdsStmt.getResultSet();
+
+            int count = 0;
+            while(s.next()){
+                ids.add(s.getString(1));
+                count++;
+            }
+
+//            System.out.println(count);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return ids;
     }
 
     /**
@@ -183,7 +234,25 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllDegreeIds (followed by optional numbers if multiple tests are used)
      */
     public static Iterable<String> getAllDegreeIds() {
-        return null;
+        //same as find all studentIDs
+        ArrayList<String> ids = new ArrayList<>();
+
+        try{
+            selectDegreeIdsStmt.executeQuery();
+            ResultSet s = selectDegreeIdsStmt.getResultSet();
+
+            int count = 0;
+            while(s.next()){
+                ids.add(s.getString(1));
+                count++;
+            }
+
+//            System.out.println(count);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return ids;
     }
 
 
