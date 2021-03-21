@@ -2,6 +2,7 @@ package test.nz.ac.wgtn.swen301.assignment1;
 
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
 import nz.ac.wgtn.swen301.studentdb.Degree;
+import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
 import nz.ac.wgtn.swen301.studentdb.Student;
 import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
@@ -26,53 +27,59 @@ public class TestStudentManager {
 
     @Test
     public void dummyTest() throws Exception {
-        new StudentManager();
-        Student student = StudentManager.readStudent("id42");
+//        new StudentManager();
+        Student student = new StudentManager().readStudent("id42");
         // THIS WILL INITIALLY FAIL !!
         assertNotNull(student);
     }
 
     @Test
     public void test_readStudent1() throws Exception {
-        new StudentManager();
+//        new StudentManager();
         Student student = StudentManager.readStudent("id42");
         assertEquals("Sue", student.getFirstName());
     }
 
     @Test
     public void test_readStudent2() throws Exception {
-        new StudentManager();
+//        new StudentManager();
         Student student = StudentManager.readStudent("id6");
         assertEquals("Tom", student.getFirstName());
     }
 
     @Test
-    public void test_readStudent3() throws Exception {
-        new StudentManager();
-        Student student = StudentManager.readStudent("id7");
-        assertEquals("Ramirez", student.getName());
+    public void test_readStudent3() {
+//        new StudentManager();
+        try{
+            Student student = new StudentManager().readStudent("id93478293");
+            assertNull(student);
+            fail();
+        } catch (NoSuchRecordException e) {
+            assertTrue(true);
+        }
+
+
     }
 
     // READ DEGREE
 
     @Test
     public void test_readDegree1() throws Exception {
-        new StudentManager();
-        Degree degree = StudentManager.readDegree("deg4");
+        Degree degree = new StudentManager().readDegree("deg4");
         assertEquals("BSc Mathematics", degree.getName());
     }
 
     @Test
     public void test_readDegree2() throws Exception {
-        new StudentManager();
-        Degree degree = StudentManager.readDegree("deg9");
+//        new StudentManager();
+        Degree degree = new StudentManager().readDegree("deg9");
         assertEquals("BCom Marketing", degree.getName());
     }
 
     @Test
     public void test_readDegree3() throws Exception {
-        new StudentManager();
-        Student student = StudentManager.readStudent("id9");
+//        new StudentManager();
+        Student student = new StudentManager().readStudent("id9");
         Degree degree = student.getDegree();
         assertEquals("BCom Marketing", degree.getName());
     }
@@ -99,13 +106,16 @@ public class TestStudentManager {
     //DELETE
     @Test
     public void deleteTest_1() throws Exception {
-        StudentManager sm = new StudentManager();
-        Student student1 = sm.readStudent("id3");
+        new StudentManager();
+        Student student1 = StudentManager.readStudent("id3");
 
-        sm.delete(student1);
+        StudentManager.delete(student1);
 
-        Student student2 = sm.readStudent("id3");
-        assertEquals("Max", student2.getFirstName());
+        try {
+            StudentManager.readStudent("id3");
+        } catch (NoSuchRecordException e) {
+            System.out.println("no such record");
+        }
 
     }
 

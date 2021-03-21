@@ -20,6 +20,8 @@ public class StudentManager {
     public static PreparedStatement deleteStmt;
     public static PreparedStatement selectStudentIdsStmt;
     public static PreparedStatement selectDegreeIdsStmt;
+    public static PreparedStatement updateStmt;
+    public static PreparedStatement createStmt;
     public static HashMap<String, Student> studentMap;
     public static HashMap<String, Degree> degreeMap;
 
@@ -32,14 +34,16 @@ public class StudentManager {
             Connection conn = DriverManager.getConnection(url);
             String readStudents = "select * from students where id = ?";
             String readDegree = "select * from degrees where id = ?";
-            String deleteStudent = "delete from students where id = ?";
+            String deleteStudent = "DELETE FROM students WHERE id = ?";
             String selectStudent = "select id from students";
             String selectDegrees = "select id from degrees";
+            String updateStudent = "update students set first_name = ?, name = ?, degree = ? where id = ?";
             studentStmt = conn.prepareStatement(readStudents);
             degreeStmt = conn.prepareStatement(readDegree);
             deleteStmt = conn.prepareStatement(deleteStudent);
             selectStudentIdsStmt = conn.prepareStatement(selectStudent);
             selectDegreeIdsStmt = conn.prepareStatement(selectDegrees);
+            updateStmt = conn.prepareStatement(updateStudent);
 
 
         } catch (SQLException e) {
@@ -70,11 +74,12 @@ public class StudentManager {
     public static Student readStudent(String id) throws NoSuchRecordException {
 
         if(!studentMap.isEmpty()){
-            if(studentMap.get(id) != null){
+            if(studentMap.containsKey(id)){
                 return studentMap.get(id);
             }
         }
 
+        String st_id = null;
         String f_name = null;
         String s_name = null;
         String degree = null;
@@ -86,19 +91,27 @@ public class StudentManager {
             ResultSet results = studentStmt.getResultSet();
 
             if (results.next()) {
+
+                st_id = results.getString(1);
                 f_name = results.getString(2);
                 s_name = results.getString(3);
                 degree = results.getString(4);
             }
             results.close();
+
+            if(st_id != null){
+                Student student = new Student(id, s_name, f_name, readDegree(degree));
+                studentMap.put(id, student);
+                return student;
+            }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
-        Student student = new Student(id, s_name, f_name, readDegree(degree));
-        studentMap.put(id, student);
+        throw new NoSuchRecordException();
 
-        return student;
+
     }
 
     /**
@@ -153,6 +166,7 @@ public class StudentManager {
         try {
             deleteStmt.setString(1, student.getId());
             int rowCount = deleteStmt.executeUpdate();
+            studentMap.remove(student.getId());
             System.out.println("deleted row: " + rowCount);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,12 +183,17 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_update (followed by optional numbers if multiple tests are used)
      */
-    public static void update(Student student) throws NoSuchRecordException {
+    public static void update(Student student) throws NoSuchRecordException, SQLException {
+
+        Student check = readStudent(student.getId());
 
         try{
-
-
-
+            if(check != null){
+                updateStmt.setString(1, student.getFirstName());
+                updateStmt.setString(2, student.getName());
+                updateStmt.setString(3, student.getDegree().getId());
+                updateStmt.setString(4, student.getId());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
