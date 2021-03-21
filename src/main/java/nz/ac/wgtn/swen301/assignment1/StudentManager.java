@@ -34,7 +34,7 @@ public class StudentManager {
             Connection conn = DriverManager.getConnection(url);
             String readStudents = "select * from students where id = ?";
             String readDegree = "select * from degrees where id = ?";
-            String deleteStudent = "DELETE FROM students WHERE id = ?";
+            String deleteStudent = "delete from students where id = ?";
             String selectStudent = "select id from students";
             String selectDegrees = "select id from degrees";
             String updateStudent = "update students set first_name = ?, name = ?, degree = ? where id = ?";
@@ -73,11 +73,11 @@ public class StudentManager {
      */
     public static Student readStudent(String id) throws NoSuchRecordException {
 
-        if(!studentMap.isEmpty()){
-            if(studentMap.containsKey(id)){
-                return studentMap.get(id);
-            }
-        }
+//        if(!studentMap.isEmpty()){
+//            if(studentMap.containsKey(id)){
+//                return studentMap.get(id);
+//            }
+//        }
 
         String st_id = null;
         String f_name = null;
@@ -124,11 +124,11 @@ public class StudentManager {
      */
     public static Degree readDegree(String id) throws NoSuchRecordException {
 
-        if(!degreeMap.isEmpty()){
-            if(degreeMap.get(id) != null){
-                return degreeMap.get(id);
-            }
-        }
+//        if(!degreeMap.isEmpty()){
+//            if(degreeMap.get(id) != null){
+//                return degreeMap.get(id);
+//            }
+//        }
 
         String name = null;
 
@@ -189,10 +189,19 @@ public class StudentManager {
 
         try{
             if(check != null){
-                updateStmt.setString(1, student.getFirstName());
-                updateStmt.setString(2, student.getName());
+                updateStmt.setString(1, student.getName());
+                System.out.println("setting last name - " + student.getName());
+                updateStmt.setString(2, student.getFirstName());
+                System.out.println("setting first name - " + student.getFirstName());
                 updateStmt.setString(3, student.getDegree().getId());
+                System.out.println("setting degree - " + student.getDegree().getId());
                 updateStmt.setString(4, student.getId());
+                System.out.println("for id: " + student.getId());
+
+                updateStmt.executeUpdate();
+//                if(studentMap.containsKey(student.getId())){
+//                    studentMap.
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -238,6 +247,7 @@ public class StudentManager {
                 ids.add(s.getString(1));
                 count++;
             }
+            s.close();
 
 //            System.out.println(count);
 
@@ -265,6 +275,7 @@ public class StudentManager {
                 ids.add(s.getString(1));
                 count++;
             }
+            s.close();
 
 //            System.out.println(count);
 

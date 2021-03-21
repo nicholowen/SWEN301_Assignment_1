@@ -8,6 +8,7 @@ import nz.ac.wgtn.swen301.studentdb.StudentDB;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -135,6 +136,31 @@ public class TestStudentManager {
             counter++;
         }
         assertTrue(counter == 10);
+    }
+
+    @Test
+    public void test_updateStudent() {
+        new StudentManager();
+        try {
+            Student s = StudentManager.readStudent("id0");
+            System.out.println(s.getId());
+            System.out.println(s.getFirstName());
+            System.out.println(s.getName());
+            System.out.println(s.getDegree().getName() + " " + s.getDegree().getId());
+
+            Student student = new Student("id0", "Lok", "Jamie", StudentManager.readDegree("deg7"));
+            StudentManager.update(student);
+
+            Student replaced = StudentManager.readStudent("id0");
+            System.out.println(replaced.getId());
+            System.out.println(replaced.getFirstName());
+            System.out.println(replaced.getName());
+            System.out.println(replaced.getDegree().getName() + " " + replaced.getDegree().getId());
+
+
+        } catch (NoSuchRecordException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
