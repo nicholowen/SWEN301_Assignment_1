@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Sat Mar 20 13:59:00 NZDT 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-4d24-7be1-000007427408 
-on database directory memory:C:\Users\Owen\IdeaProjects\Assignment1\studentdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@77556fd 
-Loaded from file:/C:/Users/Owen/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
-java.vendor=Oracle Corporation
-java.runtime.version=11.0.10+8-LTS-162
-user.dir=C:\Users\Owen\IdeaProjects\Assignment1
+Mon Mar 22 15:46:48 NZDT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-57d3-e4ed-000007300000 
+on database directory memory:D:\Intellij\SWEN301_Assignment_1\Assignment1\studentdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@77556fd 
+Loaded from file:/C:/Users/Owen%20N/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=JetBrains s.r.o
+java.runtime.version=11.0.6+8-b520.66
+user.dir=D:\Intellij\SWEN301_Assignment_1\Assignment1
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0

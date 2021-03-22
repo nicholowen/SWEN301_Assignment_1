@@ -22,9 +22,9 @@ public class FindStudentDetails {
 
     public static void main (String[] arg) throws SQLException, NoSuchRecordException {
 
-        StudentManager sm = new StudentManager();
-        sm.readStudent("id42");
-        sm.readDegree("id42");
+        if(!arg[0].isEmpty()){
+            StudentManager.readStudent(arg[0]);
+        }
 
     }
 }

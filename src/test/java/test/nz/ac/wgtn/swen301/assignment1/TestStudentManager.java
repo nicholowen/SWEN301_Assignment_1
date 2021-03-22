@@ -36,8 +36,8 @@ public class TestStudentManager {
 
     @Test
     public void test_readStudent1() throws Exception {
-//        new StudentManager();
-        Student student = StudentManager.readStudent("id42");
+        new StudentManager();
+        Student student = StudentManager.readStudent("id9999");
         assertEquals("Sue", student.getFirstName());
     }
 
@@ -48,15 +48,14 @@ public class TestStudentManager {
         assertEquals("Tom", student.getFirstName());
     }
 
-    @Test
-    public void test_readStudent3() {
-//        new StudentManager();
+    @Test(expected = NoSuchRecordException.class)
+    public void test_readStudent3() throws NoSuchRecordException {
         try{
-            Student student = new StudentManager().readStudent("id93478293");
-            assertNull(student);
-            fail();
-        } catch (NoSuchRecordException e) {
-            assertTrue(true);
+            new StudentManager().readStudent("id93478293");
+        } catch (Exception e) {
+            System.out.println("Exception thrown: "+e);
+            throw new NoSuchRecordException();
+
         }
 
 
@@ -90,8 +89,8 @@ public class TestStudentManager {
     public void testPerformance() throws  Exception {
 
         Random random = new Random();
-        new StudentManager();
-
+//        new StudentManager();
+//
         long startTime = System.nanoTime();
 
         for(int i = 0; i < 1000; i++){
@@ -142,25 +141,36 @@ public class TestStudentManager {
     public void test_updateStudent() {
         new StudentManager();
         try {
-            Student s = StudentManager.readStudent("id0");
-            System.out.println(s.getId());
-            System.out.println(s.getFirstName());
-            System.out.println(s.getName());
-            System.out.println(s.getDegree().getName() + " " + s.getDegree().getId());
+            Student student = StudentManager.readStudent("id0");
 
-            Student student = new Student("id0", "Lok", "Jamie", StudentManager.readDegree("deg7"));
-            StudentManager.update(student);
+            Student n_student = new Student("id0", "Jamie", "Lok", StudentManager.readDegree("deg7"));
+            StudentManager.update(n_student);
 
-            Student replaced = StudentManager.readStudent("id0");
-            System.out.println(replaced.getId());
-            System.out.println(replaced.getFirstName());
-            System.out.println(replaced.getName());
-            System.out.println(replaced.getDegree().getName() + " " + replaced.getDegree().getId());
+            Student updated = StudentManager.readStudent("id0");
+            if(student.getId().equals(updated.getId())){
+                assertFalse(updated.getFirstName().equals(student.getFirstName()));
+            }
 
 
         } catch (NoSuchRecordException | SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void test_createStudent() {
+        String name = null;
+        try {
+            Degree degree = StudentManager.readDegree("deg0");
+
+             StudentManager.createStudent("Chan", "Maggie", degree);
+             name = StudentManager.readStudent("id10000").getFirstName();
+
+        } catch (NoSuchRecordException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(name.equals("Maggie"));
     }
 
 

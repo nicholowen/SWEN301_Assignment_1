@@ -22,35 +22,25 @@ public class StudentManager {
     public static PreparedStatement selectDegreeIdsStmt;
     public static PreparedStatement updateStmt;
     public static PreparedStatement createStmt;
-    public static HashMap<String, Student> studentMap;
-    public static HashMap<String, Degree> degreeMap;
+    public static PreparedStatement findLastStmt;
+    public static HashMap<String, Student> studentMap  = new HashMap<String, Student>();;
+    public static HashMap<String, Degree> degreeMap   = new HashMap<String, Degree>();;
+
+    public static String url = "jdbc:derby:memory:studentdb;create=true";
+
+    public static String readStudents = "select * from students where id = ?";
+    public static String readDegree = "select * from degrees where id = ?";
+    public static String deleteStudent = "delete from students where id = ?";
+    public static String selectStudent = "select id from students";
+    public static String selectDegrees = "select id from degrees";
+    public static String updateStudent = "update students set first_name = ?, name = ?, degree = ? where id = ?";
+    public static String createStudent = "insert into students(id, first_name, name, degree) values (?, ?, ?, ?)";
+    public static String findLast = "SELECT * FROM students WHERE id=(SELECT max(id) FROM students)";
+
+//    public static studentMap = new HashMap<String, Student>();
+//    public static degreeMap = new HashMap<String, Degree>();
 
     public StudentManager(){
-        studentMap = new HashMap<String, Student>();
-        degreeMap = new HashMap<String, Degree>();
-        try{
-
-            String url = "jdbc:derby:memory:studentdb;create=true";
-            Connection conn = DriverManager.getConnection(url);
-            String readStudents = "select * from students where id = ?";
-            String readDegree = "select * from degrees where id = ?";
-            String deleteStudent = "delete from students where id = ?";
-            String selectStudent = "select id from students";
-            String selectDegrees = "select id from degrees";
-            String updateStudent = "update students set first_name = ?, name = ?, degree = ? where id = ?";
-            studentStmt = conn.prepareStatement(readStudents);
-            degreeStmt = conn.prepareStatement(readDegree);
-            deleteStmt = conn.prepareStatement(deleteStudent);
-            selectStudentIdsStmt = conn.prepareStatement(selectStudent);
-            selectDegreeIdsStmt = conn.prepareStatement(selectDegrees);
-            updateStmt = conn.prepareStatement(updateStudent);
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
 
@@ -71,13 +61,9 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student readStudent(String id) throws NoSuchRecordException {
+    public static Student readStudent(String id) throws NoSuchRecordException, SQLException {
 
-//        if(!studentMap.isEmpty()){
-//            if(studentMap.containsKey(id)){
-//                return studentMap.get(id);
-//            }
-//        }
+
 
         String st_id = null;
         String f_name = null;
@@ -85,6 +71,8 @@ public class StudentManager {
         String degree = null;
 
         try {
+            Connection conn = DriverManager.getConnection(url);
+            studentStmt = conn.prepareStatement(readStudents);
             studentStmt.setString(1, id);
 
             studentStmt.executeQuery();
@@ -98,6 +86,7 @@ public class StudentManager {
                 degree = results.getString(4);
             }
             results.close();
+            conn.close();
 
             if(st_id != null){
                 Student student = new Student(id, s_name, f_name, readDegree(degree));
@@ -122,7 +111,9 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
-    public static Degree readDegree(String id) throws NoSuchRecordException {
+    public static Degree readDegree(String id) throws NoSuchRecordException, SQLException {
+
+
 
 //        if(!degreeMap.isEmpty()){
 //            if(degreeMap.get(id) != null){
@@ -133,6 +124,8 @@ public class StudentManager {
         String name = null;
 
         try {
+            Connection conn = DriverManager.getConnection(url);
+            degreeStmt = conn.prepareStatement(readDegree);
 
             degreeStmt.setString(1, id);
 
@@ -162,8 +155,14 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_delete
      */
-    public static void delete(Student student) throws NoSuchRecordException {
+    public static void delete(Student student) throws NoSuchRecordException, SQLException {
+
+
+
         try {
+            Connection conn = DriverManager.getConnection(url);
+            deleteStmt = conn.prepareStatement(deleteStudent);
+
             deleteStmt.setString(1, student.getId());
             int rowCount = deleteStmt.executeUpdate();
             studentMap.remove(student.getId());
@@ -185,9 +184,14 @@ public class StudentManager {
      */
     public static void update(Student student) throws NoSuchRecordException, SQLException {
 
+
+
         Student check = readStudent(student.getId());
 
         try{
+            Connection conn = DriverManager.getConnection(url);
+            updateStmt = conn.prepareStatement(updateStudent);
+
             if(check != null){
                 updateStmt.setString(1, student.getName());
                 System.out.println("setting last name - " + student.getName());
@@ -221,11 +225,46 @@ public class StudentManager {
      * @return a freshly created student instance
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_createStudent (followed by optional numbers if multiple tests are used)
      */
-    public static Student createStudent(String name,String firstName,Degree degree) {
+    public static Student createStudent(String name,String firstName,Degree degree) throws SQLException {
+
 
        //get last row, add 1 to degree number
         //create new student, then add to db
+//        Student student;
+        int index = 0;
+        String id = null;
+        try {
+            Connection conn = DriverManager.getConnection(url);
+            createStmt = conn.prepareStatement(createStudent);
+            findLastStmt = conn.prepareStatement(findLast);
 
+            findLastStmt.executeQuery();
+            ResultSet result = findLastStmt.getResultSet();
+            while(result.next()){
+                id = result.getString(1);
+                System.out.println(id);
+            }
+            result.close();
+            int id_index = Integer.parseInt(id.substring(2));
+            System.out.println(id_index);
+            id_index++;
+            id = "id" + id_index;
+            System.out.println(id);
+            Student student = new Student(id, name, firstName, degree);
+            createStmt.setString(1, id);
+            createStmt.setString(2, firstName);
+            createStmt.setString(3, name);
+            createStmt.setString(4, degree.getId());
+
+            createStmt.executeUpdate();
+
+            conn.close();
+
+            return student;
+
+        } catch ( SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -234,11 +273,15 @@ public class StudentManager {
      * @return
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllStudentIds (followed by optional numbers if multiple tests are used)
      */
-    public static Collection<String> getAllStudentIds() {
+    public static Collection<String> getAllStudentIds() throws SQLException {
+
+
         //to test, put them all in a hashset, then get the number of students current students and check vs set
         ArrayList<String> ids = new ArrayList<>();
 
         try{
+            Connection conn = DriverManager.getConnection(url);
+            selectStudentIdsStmt = conn.prepareStatement(selectStudent);
             selectStudentIdsStmt.executeQuery();
             ResultSet s = selectStudentIdsStmt.getResultSet();
 
@@ -262,11 +305,14 @@ public class StudentManager {
      * @return
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllDegreeIds (followed by optional numbers if multiple tests are used)
      */
-    public static Iterable<String> getAllDegreeIds() {
+    public static Iterable<String> getAllDegreeIds() throws SQLException {
         //same as find all studentIDs
         ArrayList<String> ids = new ArrayList<>();
 
         try{
+            Connection conn = DriverManager.getConnection(url);
+            selectDegreeIdsStmt = conn.prepareStatement(selectDegrees);
+
             selectDegreeIdsStmt.executeQuery();
             ResultSet s = selectDegreeIdsStmt.getResultSet();
 
