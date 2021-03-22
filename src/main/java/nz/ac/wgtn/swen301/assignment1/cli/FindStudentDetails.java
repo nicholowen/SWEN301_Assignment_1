@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen301.assignment1.cli;
 
 import nz.ac.wgtn.swen301.assignment1.StudentManager;
 import nz.ac.wgtn.swen301.studentdb.NoSuchRecordException;
+import nz.ac.wgtn.swen301.studentdb.Student;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,9 +23,15 @@ public class FindStudentDetails {
 
     public static void main (String[] arg) throws SQLException, NoSuchRecordException {
 
+        Student student = null;
         if(!arg[0].isEmpty()){
-            StudentManager.readStudent(arg[0]);
+            student = StudentManager.readStudent(arg[0]);
+            System.out.println("ID: " + student.getId());
+            System.out.println("First Name: " + student.getFirstName());
+            System.out.println("Last Name: " + student.getName());
+            System.out.println("Degree: " + student.getDegree().getName());
         }
+
 
     }
 }
