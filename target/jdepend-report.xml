@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<JDepend>
+    <Packages>
+
+        <Package name="java.io">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.lang">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.sql">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="java.util">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+
+        <Package name="nz.ac.wgtn.swen301.assignment1">
+            <Stats>
+                <TotalClasses>1</TotalClasses>
+                <ConcreteClasses>1</ConcreteClasses>
+                <AbstractClasses>0</AbstractClasses>
+                <Ca>1</Ca>
+                <Ce>5</Ce>
+                <A>0</A>
+                <I>0.83</I>
+                <D>0.17</D>
+                <V>1</V>
+            </Stats>
+
+            <AbstractClasses>
+            </AbstractClasses>
+
+            <ConcreteClasses>
+                <Class sourceFile="StudentManager.java">
+                    nz.ac.wgtn.swen301.assignment1.StudentManager
+                </Class>
+            </ConcreteClasses>
+
+            <DependsUpon>
+                <Package>java.io</Package>
+                <Package>java.lang</Package>
+                <Package>java.sql</Package>
+                <Package>java.util</Package>
+                <Package>nz.ac.wgtn.swen301.studentdb</Package>
+            </DependsUpon>
+
+            <UsedBy>
+                <Package>nz.ac.wgtn.swen301.assignment1.cli</Package>
+            </UsedBy>
+        </Package>
+
+        <Package name="nz.ac.wgtn.swen301.assignment1.cli">
+            <Stats>
+                <TotalClasses>1</TotalClasses>
+                <ConcreteClasses>1</ConcreteClasses>
+                <AbstractClasses>0</AbstractClasses>
+                <Ca>0</Ca>
+                <Ce>5</Ce>
+                <A>0</A>
+                <I>1</I>
+                <D>0</D>
+                <V>1</V>
+            </Stats>
+
+            <AbstractClasses>
+            </AbstractClasses>
+
+            <ConcreteClasses>
+                <Class sourceFile="FindStudentDetails.java">
+                    nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails
+                </Class>
+            </ConcreteClasses>
+
+            <DependsUpon>
+                <Package>java.io</Package>
+                <Package>java.lang</Package>
+                <Package>java.sql</Package>
+                <Package>nz.ac.wgtn.swen301.assignment1</Package>
+                <Package>nz.ac.wgtn.swen301.studentdb</Package>
+            </DependsUpon>
+
+            <UsedBy>
+            </UsedBy>
+        </Package>
+
+        <Package name="nz.ac.wgtn.swen301.studentdb">
+            <error>No stats available: package referenced, but not analyzed.</error>
+        </Package>
+    </Packages>
+
+    <Cycles>
+    </Cycles>
+</JDepend>
