@@ -37,7 +37,7 @@ public class TestStudentManager {
     @Test
     public void test_readStudent1() throws Exception {
         new StudentManager();
-        Student student = StudentManager.readStudent("id9999");
+        Student student = StudentManager.readStudent("id42");
         assertEquals("Sue", student.getFirstName());
     }
 
@@ -55,10 +55,7 @@ public class TestStudentManager {
         } catch (Exception e) {
             System.out.println("Exception thrown: "+e);
             throw new NoSuchRecordException();
-
         }
-
-
     }
 
     // READ DEGREE

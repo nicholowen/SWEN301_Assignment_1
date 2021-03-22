@@ -113,14 +113,6 @@ public class StudentManager {
      */
     public static Degree readDegree(String id) throws NoSuchRecordException, SQLException {
 
-
-
-//        if(!degreeMap.isEmpty()){
-//            if(degreeMap.get(id) != null){
-//                return degreeMap.get(id);
-//            }
-//        }
-
         String name = null;
 
         try {
@@ -132,20 +124,22 @@ public class StudentManager {
             degreeStmt.executeQuery();
             ResultSet degreeResults = degreeStmt.getResultSet();
 
-
             if (degreeResults.next()) {
                 name = degreeResults.getString(2);
             }
 
             degreeResults.close();
+            conn.close();
+
+            Degree degree = new Degree(id, name);
+            degreeMap.put(id, degree);
+            return degree;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        throw new NoSuchRecordException();
 
-        Degree degree = new Degree(id, name);
-        degreeMap.put(id, degree);
-        return degree;
     }
 
     /**
@@ -155,21 +149,25 @@ public class StudentManager {
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_delete
      */
-    public static void delete(Student student) throws NoSuchRecordException, SQLException {
-
-
-
+    public static void delete(Student student) throws NoSuchRecordException {
+        int rowCount = 0;
         try {
             Connection conn = DriverManager.getConnection(url);
             deleteStmt = conn.prepareStatement(deleteStudent);
 
             deleteStmt.setString(1, student.getId());
-            int rowCount = deleteStmt.executeUpdate();
+            rowCount = deleteStmt.executeUpdate();
             studentMap.remove(student.getId());
             System.out.println("deleted row: " + rowCount);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        if(rowCount == 0){
+            throw new NoSuchRecordException();
+        }
+
     }
 
     /**
@@ -194,21 +192,18 @@ public class StudentManager {
 
             if(check != null){
                 updateStmt.setString(1, student.getName());
-                System.out.println("setting last name - " + student.getName());
                 updateStmt.setString(2, student.getFirstName());
-                System.out.println("setting first name - " + student.getFirstName());
                 updateStmt.setString(3, student.getDegree().getId());
-                System.out.println("setting degree - " + student.getDegree().getId());
                 updateStmt.setString(4, student.getId());
-                System.out.println("for id: " + student.getId());
 
                 updateStmt.executeUpdate();
-//                if(studentMap.containsKey(student.getId())){
-//                    studentMap.
-//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if(check == null){
+            throw new NoSuchRecordException();
         }
 
     }
@@ -219,19 +214,15 @@ public class StudentManager {
      * The student must have a new id that is not been used by any other Student instance or STUDENTS record (row).
      * Note that names and first names can only be max 1o characters long.
      * There is no special handling required to enforce this, just ensure that tests only use values with < 10 characters.
-     * @param name
-     * @param firstName
-     * @param degree
+     * @param name - last name of the student
+     * @param firstName - first name of the student
+     * @param degree - a degree object
      * @return a freshly created student instance
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_createStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student createStudent(String name,String firstName,Degree degree) throws SQLException {
 
-
-       //get last row, add 1 to degree number
-        //create new student, then add to db
-//        Student student;
-        int index = 0;
+        Student student = null;
         String id = null;
         try {
             Connection conn = DriverManager.getConnection(url);
@@ -242,15 +233,12 @@ public class StudentManager {
             ResultSet result = findLastStmt.getResultSet();
             while(result.next()){
                 id = result.getString(1);
-                System.out.println(id);
             }
             result.close();
             int id_index = Integer.parseInt(id.substring(2));
-            System.out.println(id_index);
             id_index++;
             id = "id" + id_index;
-            System.out.println(id);
-            Student student = new Student(id, name, firstName, degree);
+            student = new Student(id, name, firstName, degree);
             createStmt.setString(1, id);
             createStmt.setString(2, firstName);
             createStmt.setString(3, name);
@@ -265,7 +253,7 @@ public class StudentManager {
         } catch ( SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return student;
     }
 
     /**
@@ -275,9 +263,7 @@ public class StudentManager {
      */
     public static Collection<String> getAllStudentIds() throws SQLException {
 
-
-        //to test, put them all in a hashset, then get the number of students current students and check vs set
-        ArrayList<String> ids = new ArrayList<>();
+        Collection<String> ids = new ArrayList<>();
 
         try{
             Connection conn = DriverManager.getConnection(url);
@@ -285,14 +271,11 @@ public class StudentManager {
             selectStudentIdsStmt.executeQuery();
             ResultSet s = selectStudentIdsStmt.getResultSet();
 
-            int count = 0;
             while(s.next()){
                 ids.add(s.getString(1));
-                count++;
             }
             s.close();
-
-//            System.out.println(count);
+            conn.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -306,7 +289,6 @@ public class StudentManager {
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllDegreeIds (followed by optional numbers if multiple tests are used)
      */
     public static Iterable<String> getAllDegreeIds() throws SQLException {
-        //same as find all studentIDs
         ArrayList<String> ids = new ArrayList<>();
 
         try{
@@ -316,14 +298,11 @@ public class StudentManager {
             selectDegreeIdsStmt.executeQuery();
             ResultSet s = selectDegreeIdsStmt.getResultSet();
 
-            int count = 0;
             while(s.next()){
                 ids.add(s.getString(1));
-                count++;
             }
             s.close();
-
-//            System.out.println(count);
+            conn.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
