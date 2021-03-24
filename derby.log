@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Mon Mar 22 17:12:57 NZDT 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-5822-c4ca-000007145ed8 
-on database directory memory:/home/owen/IdeaProjects/Assignment1/studentdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@659e0bfd 
-Loaded from file:/home/owen/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
-java.vendor=Amazon.com Inc.
-java.runtime.version=15.0.2+7
-user.dir=/home/owen/IdeaProjects/Assignment1
+Thu Mar 25 10:48:45 NZDT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0178-6636-1a58-000006e6ffb0 
+on database directory memory:/am/rialto/home1/nicholowen/IdeaProjects/Assignment1/studentdb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@277050dc 
+Loaded from file:/am/rialto/home1/nicholowen/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=AdoptOpenJDK
+java.runtime.version=11.0.10+9
+user.dir=/am/rialto/home1/nicholowen/IdeaProjects/Assignment1
 os.name=Linux
 os.arch=amd64
-os.version=5.4.0-66-generic
+os.version=5.10.10-arch1-1
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
