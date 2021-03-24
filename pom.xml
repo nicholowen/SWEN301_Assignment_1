@@ -24,7 +24,33 @@
                 <version>2.4.0</version>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <ManifestEntries>
+                                        <Class-Path> ${project.basedir}/lib/studentdb-1.1.1.jar </Class-Path>
+                                        <Main-Class>nz.ac.wgtn.swen301.assignment1.cli.FindStudentDetails</Main-Class>
+                                    </ManifestEntries>
+
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
+
     </build>
     <dependencies>
         <dependency>
