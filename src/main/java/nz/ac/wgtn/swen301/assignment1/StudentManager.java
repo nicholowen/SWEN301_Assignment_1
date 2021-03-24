@@ -22,9 +22,11 @@ public class StudentManager {
     public static PreparedStatement selectDegreeIdsStmt;
     public static PreparedStatement updateStmt;
     public static PreparedStatement createStmt;
-    public static PreparedStatement findLastStmt;
-    public static HashMap<String, Student> studentMap  = new HashMap<String, Student>();;
-    public static HashMap<String, Degree> degreeMap   = new HashMap<String, Degree>();;
+
+    //cache maps to store already read Student and Degree objects
+    public static HashMap<String, Student> studentMap;
+    public static HashMap<String, Degree> degreeMap;
+    public static int nextid = 9999;
 
     public static String url = "jdbc:derby:memory:studentdb;create=true";
 
@@ -35,10 +37,6 @@ public class StudentManager {
     public static String selectDegrees = "select id from degrees";
     public static String updateStudent = "update students set first_name = ?, name = ?, degree = ? where id = ?";
     public static String createStudent = "insert into students(id, first_name, name, degree) values (?, ?, ?, ?)";
-    public static String findLast = "SELECT * FROM students WHERE id=(SELECT max(id) FROM students)";
-
-//    public static studentMap = new HashMap<String, Student>();
-//    public static degreeMap = new HashMap<String, Degree>();
 
     public StudentManager(){
     }
@@ -47,6 +45,8 @@ public class StudentManager {
     // DO NOT REMOVE THE FOLLOWING -- THIS WILL ENSURE THAT THE DATABASE IS AVAILABLE
     // AND THE APPLICATION CAN CONNECT TO IT WITH JDBC
     static {
+        degreeMap = new HashMap<String, Degree>();
+        studentMap = new HashMap<String, Student>();
         StudentDB.init();
     }
     // DO NOT REMOVE BLOCK ENDS HERE
@@ -56,19 +56,20 @@ public class StudentManager {
     /**
      * Return a student instance with values from the row with the respective id in the database.
      * If an instance with this id already exists, return the existing instance and do not create a second one.
-     * @param id
-     * @return
+     * @param id Student id
+     * @return Student Object
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readStudent (followed by optional numbers if multiple tests are used)
      */
     public static Student readStudent(String id) throws NoSuchRecordException, SQLException {
-
-
-
         String st_id = null;
         String f_name = null;
         String s_name = null;
         String degree = null;
+
+        if(studentMap.containsKey(id)){
+            return studentMap.get(id);
+        }
 
         try {
             Connection conn = DriverManager.getConnection(url);
@@ -106,14 +107,18 @@ public class StudentManager {
     /**
      * Return a degree instance with values from the row with the respective id in the database.
      * If an instance with this id already exists, return the existing instance and do not create a second one.
-     * @param id
-     * @return
+     * @param id Degree id
+     * @return Degree object
      * @throws NoSuchRecordException if no record with such an id exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_readDegree (followed by optional numbers if multiple tests are used)
      */
     public static Degree readDegree(String id) throws NoSuchRecordException, SQLException {
 
         String name = null;
+
+        if(degreeMap.containsKey(id)){
+            return degreeMap.get(id);
+        }
 
         try {
             Connection conn = DriverManager.getConnection(url);
@@ -145,7 +150,7 @@ public class StudentManager {
     /**
      * Delete a student instance from the database.
      * I.e., after this, trying to read a student with this id will result in a NoSuchRecordException.
-     * @param student
+     * @param student Student Object
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_delete
      */
@@ -159,6 +164,8 @@ public class StudentManager {
             rowCount = deleteStmt.executeUpdate();
             studentMap.remove(student.getId());
             System.out.println("deleted row: " + rowCount);
+
+            conn.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -176,35 +183,30 @@ public class StudentManager {
      * After executing this command, the attribute values of the object and the respective database value are consistent.
      * Note that names and first names can only be max 1o characters long.
      * There is no special handling required to enforce this, just ensure that tests only use values with < 10 characters.
-     * @param student
+     * @param student Student Object
      * @throws NoSuchRecordException if no record corresponding to this student instance exists in the database
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_update (followed by optional numbers if multiple tests are used)
      */
     public static void update(Student student) throws NoSuchRecordException, SQLException {
 
-
-
         Student check = readStudent(student.getId());
+        studentMap.remove(check.getId());
 
         try{
             Connection conn = DriverManager.getConnection(url);
             updateStmt = conn.prepareStatement(updateStudent);
+            updateStmt.setString(1, student.getName());
+            updateStmt.setString(2, student.getFirstName());
+            updateStmt.setString(3, student.getDegree().getId());
+            updateStmt.setString(4, student.getId());
 
-            if(check != null){
-                updateStmt.setString(1, student.getName());
-                updateStmt.setString(2, student.getFirstName());
-                updateStmt.setString(3, student.getDegree().getId());
-                updateStmt.setString(4, student.getId());
+            updateStmt.executeUpdate();
 
-                updateStmt.executeUpdate();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(check == null){
-            throw new NoSuchRecordException();
-        }
+        throw new NoSuchRecordException();
 
     }
 
@@ -223,22 +225,14 @@ public class StudentManager {
     public static Student createStudent(String name,String firstName,Degree degree) throws SQLException {
 
         Student student = null;
-        String id = null;
+        String id;
         try {
             Connection conn = DriverManager.getConnection(url);
             createStmt = conn.prepareStatement(createStudent);
-            findLastStmt = conn.prepareStatement(findLast);
-
-            findLastStmt.executeQuery();
-            ResultSet result = findLastStmt.getResultSet();
-            while(result.next()){
-                id = result.getString(1);
-            }
-            result.close();
-            int id_index = Integer.parseInt(id.substring(2));
-            id_index++;
-            id = "id" + id_index;
+            nextid++;
+            id = "id" + nextid;
             student = new Student(id, name, firstName, degree);
+            System.out.println(id);
             createStmt.setString(1, id);
             createStmt.setString(2, firstName);
             createStmt.setString(3, name);
@@ -258,7 +252,7 @@ public class StudentManager {
 
     /**
      * Get all student ids currently being used in the database.
-     * @return
+     * @return Collection containing all student ids
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllStudentIds (followed by optional numbers if multiple tests are used)
      */
     public static Collection<String> getAllStudentIds() throws SQLException {
@@ -285,7 +279,7 @@ public class StudentManager {
 
     /**
      * Get all degree ids currently being used in the database.
-     * @return
+     * @return An iterable collection containing all degree ids
      * This functionality is to be tested in test.nz.ac.wgtn.swen301.assignment1.TestStudentManager::test_getAllDegreeIds (followed by optional numbers if multiple tests are used)
      */
     public static Iterable<String> getAllDegreeIds() throws SQLException {
