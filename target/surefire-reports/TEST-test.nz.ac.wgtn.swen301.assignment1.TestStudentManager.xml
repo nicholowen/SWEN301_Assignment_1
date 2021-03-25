@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="13" failures="0" name="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" time="6.048" errors="0" skipped="0">
+<testsuite tests="13" failures="0" name="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" time="6.447" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.10+9"/>
@@ -44,7 +44,7 @@
     <property name="java.class.path" value="/usr/pkg/lib/java/maven/boot/plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="11"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean package"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher package"/>
     <property name="java.home" value="/usr/pkg/java/adoptopenjdk11-bin"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -63,17 +63,17 @@
     <property name="java.vendor.version" value="AdoptOpenJDK"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="testPerformance" time="2.384"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="dummyTest" time="0.506"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="deleteTest_1" time="0.401"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_createStudent" time="0.414"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readStudent1" time="0.268"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readStudent2" time="0.276"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readStudent3" time="0.24"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_getAllStudentIds" time="0.254"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_updateStudent" time="0.262"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readDegree1" time="0.314"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readDegree2" time="0.245"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readDegree3" time="0.241"/>
-  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_getAllDegreeIds" time="0.243"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="testPerformance" time="2.161"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="dummyTest" time="0.439"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="deleteTest_1" time="0.415"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_createStudent" time="0.485"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readStudent1" time="0.392"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readStudent2" time="0.338"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readStudent3" time="0.35"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_getAllStudentIds" time="0.344"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_updateStudent" time="0.338"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readDegree1" time="0.352"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readDegree2" time="0.308"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_readDegree3" time="0.271"/>
+  <testcase classname="test.nz.ac.wgtn.swen301.assignment1.TestStudentManager" name="test_getAllDegreeIds" time="0.254"/>
 </testsuite>
